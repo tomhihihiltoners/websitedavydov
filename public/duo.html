@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Урок 1: Заполните пропуск (Ночной режим)</title>
+  <style>
+    :root {
+      --bg-main: #131f24;
+      --bg-card: #202f36;
+      --border-main: #37464f;
+      --border-dark: #182329;
+      --text-main: #f1f7fb;
+      --text-sub: #77858d;
+      --green: #58cc02;
+      --green-dark: #46a302;
+      --red: #ff4b4b;
+      --disabled-text: #52656d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "DIN Round Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 16px 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Верхняя панель */
+    .top-bar {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .close-btn {
+      font-size: 24px;
+      color: var(--text-sub);
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    .close-btn:hover {
+      color: var(--text-main);
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-main);
+      border-radius: 999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      width: 86%;
+      height: 100%;
+      background: var(--green);
+      border-radius: 999px;
+      box-shadow: 0 0 12px rgba(88, 204, 2, 0.4);
+    }
+
+    .hearts {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--red);
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    /* Рабочая область */
+    .exercise-container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      margin-top: 10px;
+    }
+
+    .task-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-main);
+    }
+
+    /* Плашка с предложением */
+    .sentence-bubble {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-main);
+      padding: 24px 20px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-main);
+      border-radius: 20px;
+      box-shadow: 0 5px 0 var(--border-dark);
+    }
+
+    .blank-slot {
+      display: inline-block;
+      min-width: 95px;
+      height: 40px;
+      border-bottom: 3px dashed var(--border-main);
+      vertical-align: middle;
+      border-radius: 4px;
+    }
+
+    /* Зона банка слов */
+    .word-bank {
+      width: 100%;
+      min-height: 90px;
+      border-top: 2px solid var(--border-main);
+      padding-top: 28px;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Убегающая кнопка */
+    .evasive-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 34px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-main);
+      background: var(--bg-card);
+      border: 2px solid var(--border-main);
+      border-bottom: 5px solid var(--border-dark);
+      border-radius: 16px;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2), left 0.16s ease, top 0.16s ease;
+      z-index: 1000;
+    }
+
+    .evasive-chip:active {
+      border-bottom-width: 2px;
+      transform: translateY(3px);
+    }
+
+    /* Всплывающие фразы совы */
+    .toast-hint {
+      position: fixed;
+      top: 86px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1216;
+      color: #38bdf8;
+      border: 1px solid #1e293b;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 1100;
+    }
+
+    .toast-hint.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(4px);
+    }
+
+    /* Нижняя панель */
+    .bottom-bar {
+      width: 100%;
+      max-width: 600px;
+      border-top: 2px solid var(--border-main);
+      padding-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .check-btn {
+      width: 100%;
+      background: var(--bg-card);
+      color: var(--disabled-text);
+      border: 2px solid var(--border-main);
+      border-bottom: 5px solid var(--border-dark);
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: not-allowed;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="close-btn" onclick="alert('Отдел кадров отклонил закрытие вкладки')">✕</div>
+    <div class="progress-track">
+      <div class="progress-fill"></div>
+    </div>
+    <div class="hearts">
+      <span>❤️</span>
+      <span id="lives">1</span>
+    </div>
+  </div>
+
+  <div class="toast-hint" id="toast"></div>
+
+  <div class="exercise-container">
+    <h2 class="task-title">Заполните пропуск</h2>
+
+    <div class="sentence-bubble">
+      <span>Я</span>
+      <span class="blank-slot"></span>
+      <span>увольняюсь</span>
+    </div>
+
+    <div class="word-bank" id="bank">
+      <button class="evasive-chip" id="wordChip">НЕ</button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="check-btn" id="checkBtn">Проверить</button>
+  </div>
+
+  <script>
+    const chip = document.getElementById("wordChip");
+    const toast = document.getElementById("toast");
+
+    const taunts = [
+      "Даже не надейся 🦉",
+      "Сиди монтируй дальше!",
+      "Кто смену дорабатывать будет?",
+      "Правки ещё не согласованы",
+      "У вас ещё 48 дублей впереди",
+      "Слово недоступно на вашем тарифе",
+      "Зелёная сова следит за тобой 🔪",
+      "Кнопка заблокирована продюсером"
+    ];
+
+    let isRelocated = false;
+
+    function showToast(text) {
+      toast.innerText = text;
+      toast.classList.add("show");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1300);
+    }
+
+    function escapeButton(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      // При первом наведении переключаем в fixed, чтобы летать по экрану
+      if (!isRelocated) {
+        chip.style.position = "fixed";
+        isRelocated = true;
+      }
+
+      const padding = 20;
+      const chipWidth = chip.offsetWidth || 100;
+      const chipHeight = chip.offsetHeight || 50;
+
+      const maxX = window.innerWidth - chipWidth - padding;
+      const maxY = window.innerHeight - chipHeight - 110; // не заходить на нижнюю панель
+      const minY = 90; // не перекрывать шапку
+
+      const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
+      const randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
+
+      chip.style.left = `${randomX}px`;
+      chip.style.top = `${randomY}px`;
+
+      // Лёгкий наклон карточки
+      const randomRot = (Math.random() - 0.5) * 26;
+      chip.style.transform = `rotate(${randomRot}deg) scale(1.04)`;
+
+      const randomPhrase = taunts[Math.floor(Math.random() * taunts.length)];
+      showToast(randomPhrase);
+    }
+
+    // Обработка курсора на ПК и тач-касания на смартфонах
+    chip.addEventListener("mouseenter", escapeButton);
+    chip.addEventListener("touchstart", escapeButton, { passive: false });
+    chip.addEventListener("click", escapeButton);
+  </script>
+</body>
+</html>
