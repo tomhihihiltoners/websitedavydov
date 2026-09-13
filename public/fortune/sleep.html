@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Колесо судьбы: Сколько сегодня спим?</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: #0f1015;
+      color: #f1f2f6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      color: #ff4757;
+      text-shadow: 0 0 15px rgba(255, 71, 87, 0.4);
+    }
+
+    .wheel-container {
+      position: relative;
+      width: min(88vw, 420px);
+      height: min(88vw, 420px);
+      margin-bottom: 28px;
+    }
+
+    /* Стрелка-указатель */
+    .pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 34px solid #ffffff;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+      z-index: 20;
+    }
+
+    .wheel-wrapper {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 0 6px #1e2029, 0 12px 35px rgba(0, 0, 0, 0.8);
+      transition: transform 4.5s cubic-bezier(0.12, 0.85, 0.15, 1);
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+    }
+
+    /* Центральная кнопка запуска */
+    .center-cap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #2f3542, #1e2029);
+      border: 3px solid #ff4757;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      user-select: none;
+      transition: transform 0.15s ease;
+    }
+
+    .center-cap:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .center-cap:active {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    .center-cap span {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    /* Вердикт */
+    #result {
+      font-size: 1.4rem;
+      font-weight: 700;
+      min-height: 40px;
+      text-align: center;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .highlight {
+      transform: scale(1.1);
+      color: #ff4757 !important;
+      border-color: #ff4757 !important;
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>СКОЛЬКО СЕГОДНЯ СПИМ?</h1>
+
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <div class="wheel-wrapper" id="wheelWrapper">
+      <canvas id="wheelCanvas" width="800" height="800"></canvas>
+    </div>
+    <div class="center-cap" id="spinBtn">
+      <span>КРУТИТЬ</span>
+    </div>
+  </div>
+
+  <div id="result">Испытай удачу...</div>
+
+  <script>
+    // ==========================================
+    // КОНФИГУРАЦИЯ СЕКТОРОВ И ШАНСОВ
+    // weight — относительный вес (чем больше, тем выше шанс)
+    // ==========================================
+    const SECTORS = [
+      { text: "6 ЧАСОВ",           weight: 12, bg: "#2f3542", color: "#ffffff" },
+      { text: "7 ЧАСОВ",           weight: 10, bg: "#1e272e", color: "#ffffff" },
+      { text: "8 ЧАСОВ",           weight: 4,  bg: "#2ed573", color: "#000000" }, // Почти нереально
+      { text: "9 ЧАСОВ",           weight: 2,  bg: "#10ac84", color: "#ffffff" },
+      { text: "10 ЧАСОВ",          weight: 1,  bg: "#1e90ff", color: "#ffffff" },
+      { text: "11 ЧАСОВ",          weight: 1,  bg: "#3742fa", color: "#ffffff" },
+      { text: "12 ЧАСОВ",          weight: 1,  bg: "#5f27cd", color: "#ffffff" },
+      { text: "2 ЧАСА",        weight: 14, bg: "#ffa502", color: "#000000" },
+      { text: "НЕ СПИМ, РАБОТАЕМ!", weight: 45, bg: "#ff4757", color: "#ffffff" }  // Суровая реальность
+    ];
+
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const wheelWrapper = document.getElementById("wheelWrapper");
+    const spinBtn = document.getElementById("spinBtn");
+    const resultBox = document.getElementById("result");
+
+    const totalSectors = SECTORS.length;
+    const arc = (2 * Math.PI) / totalSectors;
+    const center = canvas.width / 2;
+    const radius = center - 15;
+
+    let isSpinning = false;
+    let currentRotation = 0;
+
+    // Синтезатор щелчка через Web Audio
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTick() {
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.04);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+
+    // Отрисовка колеса (Сектор 0 центрируется по верху в начальной позиции)
+    function drawWheel() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < totalSectors; i++) {
+        const angle = i * arc - Math.PI / 2 - arc / 2;
+
+        // Сектор
+        ctx.beginPath();
+        ctx.fillStyle = SECTORS[i].bg;
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, radius, angle, angle + arc);
+        ctx.lineTo(center, center);
+        ctx.fill();
+        ctx.strokeStyle = "#15161d";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Текст
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(angle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = SECTORS[i].color;
+        ctx.font = "bold 26px sans-serif";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
+        ctx.shadowBlur = 4;
+        ctx.fillText(SECTORS[i].text, radius - 30, 10);
+        ctx.restore();
+      }
+    }
+
+    // Выбор сектора по весам (вероятностям)
+    function getWeightedRandomIndex() {
+      const totalWeight = SECTORS.reduce((acc, item) => acc + item.weight, 0);
+      let rand = Math.random() * totalWeight;
+      for (let i = 0; i < SECTORS.length; i++) {
+        if (rand < SECTORS[i].weight) return i;
+        rand -= SECTORS[i].weight;
+      }
+      return 0;
+    }
+
+    // Логика вращения
+    function spin() {
+      if (isSpinning) return;
+      isSpinning = true;
+      resultBox.classList.remove("highlight");
+      resultBox.innerText = "Судьба решает...";
+
+      const targetIndex = getWeightedRandomIndex();
+      const sectorDeg = 360 / totalSectors;
+
+      // Математика: докручиваем выбранный сектор точно под верхнюю стрелку
+      const targetSectorAngle = 360 - (targetIndex * sectorDeg);
+      const currentMod = currentRotation % 360;
+      const distance = (targetSectorAngle - currentMod + 360) % 360;
+
+      // 6 полных оборотов + точное смещение
+      currentRotation += 360 * 6 + distance;
+      wheelWrapper.style.transform = `rotate(${currentRotation}deg)`;
+
+      // Звуковые щелчки во время хода
+      let tickInterval = setInterval(() => playTick(), 120);
+      setTimeout(() => { clearInterval(tickInterval); }, 3800);
+
+      // Завершение анимации
+      setTimeout(() => {
+        isSpinning = false;
+        resultBox.innerText = SECTORS[targetIndex].text;
+        resultBox.classList.add("highlight");
+      }, 4500);
+    }
+
+    spinBtn.addEventListener("click", spin);
+    drawWheel();
+  </script>
+</body>
+</html>
