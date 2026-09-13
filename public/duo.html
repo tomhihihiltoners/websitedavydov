@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Урок 1: Заполните пропуск (Ночной режим)</title>
+  <title>Урок 1: Заполните пропуск</title>
   <style>
     :root {
       --bg-main: #131f24;
@@ -114,7 +114,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      font-size: 1.65rem;
+      font-size: 1.7rem;
       font-weight: 700;
       color: var(--text-main);
       padding: 24px 20px;
@@ -126,14 +126,14 @@
 
     .blank-slot {
       display: inline-block;
-      min-width: 95px;
+      min-width: 170px;
       height: 40px;
       border-bottom: 3px dashed var(--border-main);
       vertical-align: middle;
       border-radius: 4px;
     }
 
-    /* Зона банка слов */
+    /* Банк вариантов слов */
     .word-bank {
       width: 100%;
       min-height: 90px;
@@ -149,8 +149,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 34px;
-      font-size: 1.3rem;
+      padding: 14px 28px;
+      font-size: 1.25rem;
       font-weight: 800;
       color: var(--text-main);
       background: var(--bg-card);
@@ -162,6 +162,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.16s cubic-bezier(0.2, 0.9, 0.3, 1.2), left 0.16s ease, top 0.16s ease;
       z-index: 1000;
+      white-space: nowrap;
     }
 
     .evasive-chip:active {
@@ -243,11 +244,10 @@
     <div class="sentence-bubble">
       <span>Я</span>
       <span class="blank-slot"></span>
-      <span>увольняюсь</span>
     </div>
 
     <div class="word-bank" id="bank">
-      <button class="evasive-chip" id="wordChip">НЕ</button>
+      <button class="evasive-chip" id="wordChip">увольняюсь</button>
     </div>
   </div>
 
@@ -260,14 +260,15 @@
     const toast = document.getElementById("toast");
 
     const taunts = [
-      "Даже не надейся 🦉",
+      "Куда собрался? 🦉",
+      "Заявление утеряно отделом кадров",
+      "Трудовая книжка остаётся у нас 😈",
       "Сиди монтируй дальше!",
       "Кто смену дорабатывать будет?",
       "Правки ещё не согласованы",
       "У вас ещё 48 дублей впереди",
-      "Слово недоступно на вашем тарифе",
-      "Зелёная сова следит за тобой 🔪",
-      "Кнопка заблокирована продюсером"
+      "Объяснительную кстати уже написал?",
+      "Действие заблокировано продюсером"
     ];
 
     let isRelocated = false;
@@ -287,19 +288,18 @@
         e.stopPropagation();
       }
 
-      // При первом наведении переключаем в fixed, чтобы летать по экрану
       if (!isRelocated) {
         chip.style.position = "fixed";
         isRelocated = true;
       }
 
       const padding = 20;
-      const chipWidth = chip.offsetWidth || 100;
+      const chipWidth = chip.offsetWidth || 160;
       const chipHeight = chip.offsetHeight || 50;
 
       const maxX = window.innerWidth - chipWidth - padding;
-      const maxY = window.innerHeight - chipHeight - 110; // не заходить на нижнюю панель
-      const minY = 90; // не перекрывать шапку
+      const maxY = window.innerHeight - chipHeight - 110;
+      const minY = 90;
 
       const randomX = Math.floor(Math.random() * (maxX - padding)) + padding;
       const randomY = Math.floor(Math.random() * (maxY - minY)) + minY;
@@ -307,7 +307,6 @@
       chip.style.left = `${randomX}px`;
       chip.style.top = `${randomY}px`;
 
-      // Лёгкий наклон карточки
       const randomRot = (Math.random() - 0.5) * 26;
       chip.style.transform = `rotate(${randomRot}deg) scale(1.04)`;
 
@@ -315,7 +314,6 @@
       showToast(randomPhrase);
     }
 
-    // Обработка курсора на ПК и тач-касания на смартфонах
     chip.addEventListener("mouseenter", escapeButton);
     chip.addEventListener("touchstart", escapeButton, { passive: false });
     chip.addEventListener("click", escapeButton);
