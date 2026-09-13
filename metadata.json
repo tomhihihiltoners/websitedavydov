@@ -1,0 +1,6 @@
+{
+  "name": "Дмитрий Давыдов",
+  "description": "Переход в Telegram-канал Дмитрия Давыдова при нажатии на изображение.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
