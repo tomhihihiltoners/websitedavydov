@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field Kit Checkout</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+    :root{--ink:#17211f;--muted:#6d7772;--paper:#f5f6f1;--panel:#fff;--line:#dfe4dc;--accent:#ee644b;--accent-dark:#c74d39;--mint:#d7eee3;--danger:#9f3728;--shadow:0 18px 50px rgba(26,45,37,.08)}
+    *{box-sizing:border-box} body{margin:0;color:var(--ink);background:var(--paper);font-family:'DM Sans',sans-serif}.shell{width:min(1040px,calc(100% - 40px));margin:auto;padding:54px 0 32px}.hero{position:relative;padding:24px 28px 38px;overflow:hidden;border-bottom:1px solid var(--line)}
+    .eyebrow,.step,footer,small{font:700 11px 'Space Mono',monospace;letter-spacing:.08em;text-transform:uppercase}.eyebrow{color:var(--accent-dark);margin-bottom:18px}h1{max-width:630px;margin:0;font-size:clamp(42px,7vw,76px);line-height:.96;letter-spacing:-.055em}.hero p{max-width:520px;margin:22px 0 0;color:var(--muted);font-size:17px;line-height:1.55}.hero-mark{position:absolute;right:26px;top:25px;display:grid;place-items:center;width:74px;height:74px;color:#fff;background:var(--accent);border-radius:50%;font-size:37px;transform:rotate(-18deg)}
+    form{display:grid;gap:20px;padding:28px}.panel{padding:29px;background:var(--panel);border:1px solid rgba(223,228,220,.9);box-shadow:var(--shadow)}.section-heading{display:flex;align-items:flex-start;gap:16px;margin-bottom:26px}.section-heading h2{margin:0 0 5px;font-size:21px}.section-heading p{margin:0;color:var(--muted);font-size:14px}.step{display:grid;place-items:center;width:33px;height:33px;flex:0 0 33px;color:var(--accent-dark);background:#fff0eb}.metadata-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}.field{display:grid;gap:8px;color:var(--muted);font:700 11px 'Space Mono',monospace;letter-spacing:.04em;text-transform:uppercase}.field-wide{grid-column:span 3}.field input,.search-field input,select{width:100%;min-height:48px;padding:0 14px;color:var(--ink);background:#fbfcf9;border:1px solid var(--line);border-radius:0;font:500 15px 'DM Sans',sans-serif;outline:0}.field input:focus,.search-field:focus-within,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(238,100,75,.12)}
+    .equipment-heading{align-items:center}.equipment-heading>div{flex:1}.summary-pill{padding:9px 13px;color:#1d5d46;background:var(--mint);border-radius:999px;font:700 11px 'Space Mono',monospace;white-space:nowrap}.search-field{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-left:15px;border:1px solid var(--line);background:#fbfcf9}.search-field span{color:var(--accent);font-size:28px;line-height:1}.search-field input{min-height:54px;padding-left:0;border:0;background:transparent;box-shadow:none}.category{border-top:1px solid var(--line)}.category summary{display:flex;justify-content:space-between;align-items:center;padding:19px 0;cursor:pointer;list-style:none;font-weight:700}.category summary::-webkit-details-marker{display:none}.category summary:after{content:'+';color:var(--accent);font-size:22px;font-weight:400}.category[open] summary:after{content:'−'}.category summary em{margin-left:auto;margin-right:18px;color:var(--muted);font:11px 'Space Mono',monospace;font-style:normal}.category-items{display:grid;gap:10px;padding-bottom:17px}.item{padding:17px 18px;background:#f7f9f5;border-left:3px solid transparent}.item.serial-item{border-left-color:var(--accent);background:#fff9f6}.item-top{display:flex;align-items:center;justify-content:space-between;gap:16px}.item h3{margin:0 0 5px;font-size:15px}.item p,.item-hint{margin:0;color:var(--muted);font-size:12px}.counter{display:flex;align-items:center;gap:13px}.counter button{display:grid;place-items:center;width:31px;height:31px;padding:0;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:50%;font-size:20px;cursor:pointer}.counter button:hover{color:#fff;background:var(--accent);border-color:var(--accent)}.counter output{min-width:18px;text-align:center;font:700 14px 'Space Mono',monospace}.item-hint{margin-top:14px;font-style:italic}.serials{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:18px;padding-top:16px;border-top:1px dashed #e8d8d1}.serial-picker{display:grid;gap:6px;color:var(--muted);font:10px 'Space Mono',monospace;text-transform:uppercase}select{min-height:42px;background:var(--panel);font-size:13px}.loading,.empty-state{padding:32px 0;color:var(--muted);text-align:center}.error-text,.alert{color:var(--danger)}.alert{padding:16px 18px;background:#fff0eb;border:1px solid #f2c4b9;font-size:14px}.drop-zone{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:17px 18px;margin-bottom:20px;border:1px dashed #c9d1c8;background:#fbfcf9;color:var(--muted);font-size:13px}.drop-zone.is-over{border-color:var(--accent);background:#fff9f6}.drop-zone strong{display:block;color:var(--ink);margin-bottom:4px}.file-button{padding:9px 12px;color:var(--ink);background:#fff;border:1px solid var(--line);font:600 12px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}.file-button:hover{border-color:var(--accent);color:var(--accent-dark)}.progress-wrap{display:none;height:5px;margin:-8px 28px 18px;background:#e3e8e0}.progress-wrap.visible{display:block}.progress-bar{width:0;height:100%;background:var(--accent);transition:width .25s ease}.generate-button{display:flex;align-items:center;justify-content:space-between;width:calc(100% - 56px);margin:0 28px 18px;padding:18px 21px;color:#fff;background:var(--ink);border:0;font:700 15px 'DM Sans',sans-serif;cursor:pointer}.generate-button:hover{background:var(--accent-dark)}.generate-button:disabled{opacity:.6;cursor:wait}.generate-button span:last-child{font-size:25px;font-weight:400}footer{padding:0 28px;color:var(--muted);font-size:9px;letter-spacing:.02em;text-transform:none}footer strong{color:var(--ink)}
+    @media(max-width:700px){.shell{width:min(100% - 20px,1040px);padding-top:20px}.hero{padding:20px 17px 30px}.hero-mark{width:54px;height:54px;font-size:28px}form{padding:15px 0}.panel{padding:21px 17px}.metadata-grid{grid-template-columns:1fr 1fr}.field-wide{grid-column:span 2}.equipment-heading{align-items:flex-start;flex-wrap:wrap}.equipment-heading .summary-pill{margin-left:49px;margin-top:-10px}.drop-zone{align-items:flex-start;flex-direction:column}.generate-button{width:100%;margin:0 0 18px}footer{padding:0 17px;line-height:1.8}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/docx@9.7.1/dist/index.iife.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero"><div class="eyebrow">OPERATIONS / EQUIPMENT DESK</div><h1>Field kit checkout</h1><p>Build a precise handoff sheet from local inventory, then download it directly to Word.</p><div class="hero-mark" aria-hidden="true">↗</div></header>
+    <form id="checkout-form" novalidate>
+      <section class="panel metadata-panel"><div class="section-heading"><span class="step">01</span><div><h2>Event details</h2><p>Set the context for this checkout.</p></div></div><div class="metadata-grid">
+        <label class="field field-wide">Event purpose / objective<input id="purpose" type="text" placeholder="e.g. Documentary shoot — day one" required></label>
+        <label class="field field-wide">Place<input id="place" type="text" placeholder="e.g. Studio A or Main Office" required></label>
+        <label class="field">Date<input id="date" type="date" required></label>
+      </div></section>
+      <section class="panel equipment-panel"><div class="section-heading equipment-heading"><span class="step">02</span><div><h2>Choose equipment</h2><p>Assign the exact serial numbers leaving the desk.</p></div><span id="selection-summary" class="summary-pill">0 units</span></div>
+        <div id="drop-zone" class="drop-zone"><div><strong>Drop a CSV inventory here</strong>Use the columns Category, Item_Name, Serial_Number. The default is loaded from gear_inventory.csv.</div><button id="file-button" class="file-button" type="button">Choose CSV</button><input id="file-input" type="file" accept=".csv,text/csv" hidden></div>
+        <label class="search-field" for="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search equipment models" autocomplete="off"></label><div id="inventory" class="inventory" aria-live="polite"><div class="loading">Loading inventory...</div></div>
+      </section>
+      <div id="alert" class="alert" role="alert" hidden></div>
+      <div id="progress-wrap" class="progress-wrap" aria-hidden="true"><div id="progress-bar" class="progress-bar"></div></div>
+      <button id="generate" class="generate-button" type="submit"><span>Generate document</span><span aria-hidden="true">→</span></button>
+    </form>
+    <footer>Inventory runs in this browser · no files are uploaded · DOCX is generated locally</footer>
+  </main>
+  <script>
+    const DEFAULT_CSV = `Category,Item_Name,Serial_Number
+Камеры,Canon EOS R6 Mark II,51034001206
+Камеры,Canon EOS R6 Mark II,51034001207
+Камеры,Canon EOS R6 Mark II,51034001208
+Камеры,Canon EOS R6 Mark II(брак),51034001209
+Камеры,Canon EOS C70,
+Камеры,GoPro HERO 12 Black,510134001165
+Камеры,Canon EOS R5C,
+Объективы,RF 24-70mm ,510134001172
+Объективы,RF 24-70mm,510134001173
+Объективы,RF 24-70mm,510134001174
+Объективы,RF 85mm ,510134001176
+Объективы,RF 70-200mm ,510134001175
+Объективы,RF 100mm,
+Объективы,RF 200-800mm ,
+Звук,RODE WIRELESS GO 2,510134001188
+Звук,RODE WIRELESS GO 2,510134001189
+Звук,Рекордер ZOOM Handy H2n ,510134001405
+Звук,Рекордер ZOOM Handy 8,
+Звук,Петличный микрофон RODE Lavalier ,
+Аксессуары,Аккумуляторная батарея,
+Стабилизаторы/ручки/прочее,Стабилизатор DJI RS4 PRO,510134001201
+Стабилизаторы/ручки/прочее,Стабилизатор для GoPro ,510134001200
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,Аккумуляторная батарея,
+Аксессуары,SD Карта Памяти 256Gb,
+Аксессуары,SD Карта Памяти 256Gb,
+Аксессуары,SD Карта Памяти 256Gb,
+Аксессуары,SD Карта Памяти 256Gb,
+Аксессуары,Аккумулятор для камеры GoPro,`;
+    const state = { categories: [], selections: new Map() };
+    const $ = (selector) => document.querySelector(selector);
+    const escapeHtml = (value) => String(value).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
+    const keyOf = (category, name) => `${category}::${name}`;
+    const findItem = (category, name) => state.categories.find(group => group.category === category)?.items.find(item => item.name === name);
+    const getSelection = (category, item) => state.selections.get(keyOf(category, item.name)) || { quantity: 0, serials: [] };
+
+    function parseCsv(text) {
+      const rows = []; let row = [], cell = '', quoted = false;
+      for (let i = 0; i < text.length; i += 1) { const char = text[i], next = text[i + 1];
+        if (char === '"' && quoted && next === '"') { cell += '"'; i += 1; } else if (char === '"') quoted = !quoted; else if (char === ',' && !quoted) { row.push(cell); cell = ''; } else if ((char === '\n' || char === '\r') && !quoted) { if (char === '\r' && next === '\n') i += 1; row.push(cell); if (row.some(value => value.trim())) rows.push(row); row = []; cell = ''; } else cell += char;
+      }
+      if (cell || row.length) { row.push(cell); rows.push(row); }
+      return rows;
+    }
+    function buildInventory(csv) {
+      const rows = parseCsv(csv.replace(/^\uFEFF/, '')); const headers = rows.shift()?.map(value => value.trim());
+      if (!headers || !['Category','Item_Name','Serial_Number'].every(header => headers.includes(header))) throw new Error('CSV must contain Category, Item_Name, and Serial_Number columns.');
+      const indexes = Object.fromEntries(headers.map((header, index) => [header, index])); const grouped = new Map();
+      rows.forEach(values => { const category = (values[indexes.Category] || '').trim(), name = (values[indexes.Item_Name] || '').trim(), serial = (values[indexes.Serial_Number] || '').trim(); if (!category || !name) return; const categoryItems = grouped.get(category) || new Map(); const item = categoryItems.get(name) || { name, serials: [], unnumbered: 0 }; if (!serial || serial === '-') item.unnumbered += 1; else if (!item.serials.includes(serial)) item.serials.push(serial); categoryItems.set(name, item); grouped.set(category, categoryItems); });
+      return [...grouped.entries()].sort((a,b) => a[0].localeCompare(b[0])).map(([category, items]) => ({ category, items: [...items.values()].sort((a,b) => a.name.localeCompare(b.name)).map(item => ({...item, available: item.serials.length + item.unnumbered})) }));
+    }
+    function updateSummary() { const count = [...state.selections.values()].reduce((sum, item) => sum + item.quantity, 0); $('#selection-summary').textContent = `${count} unit${count === 1 ? '' : 's'}`; }
+    function renderItem(category, item) { const selection = getSelection(category, item), numberedOnly = item.serials.length > 0 && item.unnumbered === 0;
+      const pickers = Array.from({length: selection.quantity}, (_, index) => { const selected = selection.serials[index] || ''; const options = item.serials.map(serial => { const used = selection.serials.some((value, serialIndex) => serialIndex !== index && value === serial); return `<option value="${escapeHtml(serial)}" ${serial === selected ? 'selected' : ''} ${used ? 'disabled' : ''}>${escapeHtml(serial)}${used ? ' (selected)' : ''}</option>`; }).join(''); return `<label class="serial-picker">Unit ${index + 1}<select class="serial-select" data-category="${escapeHtml(category)}" data-name="${escapeHtml(item.name)}" data-index="${index}" required><option value="">Choose serial number</option>${options}</select></label>`; }).join('');
+      const assignment = !selection.quantity ? '<div class="item-hint">Add units to assign serial numbers</div>' : numberedOnly ? `<div class="serials">${pickers}</div>` : '<div class="item-hint">Quantity-only item — no serial numbers required</div>';
+      return `<article class="item ${numberedOnly && selection.quantity ? 'serial-item' : ''}"><div class="item-top"><div><h3>${escapeHtml(item.name)}</h3><p>${item.available} available</p></div><div class="counter"><button type="button" data-action="decrease" data-category="${escapeHtml(category)}" data-name="${escapeHtml(item.name)}" aria-label="Decrease ${escapeHtml(item.name)}">−</button><output>${selection.quantity}</output><button type="button" data-action="increase" data-category="${escapeHtml(category)}" data-name="${escapeHtml(item.name)}" aria-label="Increase ${escapeHtml(item.name)}">+</button></div></div>${assignment}</article>`;
+    }
+    function renderInventory(filter = '') { const open = new Set([...document.querySelectorAll('details.category[open]')].map(el => el.dataset.category)); const hadCategories = document.querySelector('details.category') !== null; const query = filter.trim().toLowerCase(); const visible = state.categories.map(group => ({...group, items: group.items.filter(item => item.name.toLowerCase().includes(query))})).filter(group => group.items.length); if (!visible.length) { $('#inventory').innerHTML = '<div class="empty-state">No equipment matches that search.</div>'; return; } $('#inventory').innerHTML = visible.map((group, index) => `<details class="category" data-category="${escapeHtml(group.category)}" ${hadCategories ? (open.has(group.category) ? 'open' : '') : (index === 0 ? 'open' : '')}><summary><span>${escapeHtml(group.category)}</span><em>${group.items.length} model${group.items.length === 1 ? '' : 's'}</em></summary><div class="category-items">${group.items.map(item => renderItem(group.category, item)).join('')}</div></details>`).join(''); $('#inventory').querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', changeQuantity)); $('#inventory').querySelectorAll('.serial-select').forEach(select => select.addEventListener('change', changeSerial)); }
+    function changeQuantity(event) { const button = event.currentTarget, category = button.dataset.category, item = findItem(category, button.dataset.name); if (!item) return; const current = getSelection(category, item), next = Math.max(0, Math.min(item.available, current.quantity + (button.dataset.action === 'increase' ? 1 : -1))); state.selections.set(keyOf(category, item.name), {quantity: next, serials: current.serials.slice(0, next)}); renderInventory($('#search').value); updateSummary(); }
+    function changeSerial(event) { const select = event.currentTarget, selection = state.selections.get(keyOf(select.dataset.category, select.dataset.name)); if (!selection) return; selection.serials[Number(select.dataset.index)] = select.value; state.selections.set(keyOf(select.dataset.category, select.dataset.name), selection); renderInventory($('#search').value); }
+    function showAlert(message) { $('#alert').textContent = message; $('#alert').hidden = false; $('#alert').scrollIntoView({behavior:'smooth', block:'center'}); } function clearAlert() { $('#alert').hidden = true; $('#alert').textContent = ''; }
+    function loadCsv(text) { state.categories = buildInventory(text); state.selections.clear(); renderInventory($('#search').value); updateSummary(); }
+
+    async function generateDocx(payload, rows) { const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, HeadingLevel, AlignmentType, BorderStyle } = window.docx; if (!Document) throw new Error('The DOCX library could not be loaded. Check your internet connection and reload the page.'); const cell = (text, bold = false) => new TableCell({children:[new Paragraph({children:[new TextRun({text:String(text), bold})]})]}); const tableRows = [new TableRow({children:['Index / №','Category','Item Name','Quantity','Serial Number'].map(value => cell(value, true))}), ...rows.map((row, index) => new TableRow({children:[cell(index + 1),cell(row.category),cell(row.name),cell(row.quantity),cell(row.serial_number || '—')]}))]; const border = {style:BorderStyle.SINGLE, size:4, color:'D9DED8'}; const document = new Document({sections:[{properties:{page:{margin:{top:900,right:900,bottom:900,left:900}}}, children:[new Paragraph({text:'FIELD KIT CHECKOUT',heading:HeadingLevel.TITLE}), new Paragraph({children:[new TextRun({text:'Purpose: ',bold:true}),new TextRun(payload.purpose)]}), new Paragraph({children:[new TextRun({text:'Place: ',bold:true}),new TextRun(payload.place)]}), new Paragraph({children:[new TextRun({text:'Date: ',bold:true}),new TextRun(payload.date)]}), new Paragraph({text:''}), new Table({width:{size:100,type:WidthType.PERCENTAGE},borders:{top:border,bottom:border,left:border,right:border,insideHorizontal:border,insideVertical:border},rows:tableRows})]}]}); return Packer.toBlob(document); }
+    function selectedRows() { return [...state.selections.entries()].filter(([, selection]) => selection.quantity > 0).flatMap(([key, selection]) => { const separator = key.indexOf('::'); const category = key.slice(0, separator), name = key.slice(separator + 2); return [...Array(selection.quantity)].map((_, index) => ({category,name,quantity:'1',serial_number:selection.serials[index] || ''})); }); }
+
+    $('#search').addEventListener('input', event => renderInventory(event.target.value)); $('#file-button').addEventListener('click', () => $('#file-input').click()); $('#file-input').addEventListener('change', event => { const file = event.target.files[0]; if (file) readInventoryFile(file); });
+    const dropZone = $('#drop-zone'); ['dragenter','dragover'].forEach(type => dropZone.addEventListener(type, event => { event.preventDefault(); dropZone.classList.add('is-over'); })); ['dragleave','drop'].forEach(type => dropZone.addEventListener(type, event => { event.preventDefault(); dropZone.classList.remove('is-over'); })); dropZone.addEventListener('drop', event => { const file = event.dataTransfer.files[0]; if (file) readInventoryFile(file); });
+    function readInventoryFile(file) { if (!file.name.toLowerCase().endsWith('.csv') && file.type !== 'text/csv') { showAlert('Please choose a CSV inventory file.'); return; } const reader = new FileReader(); reader.onload = () => { try { loadCsv(reader.result); clearAlert(); } catch (error) { showAlert(error.message); } }; reader.onerror = () => showAlert('Unable to read the inventory file.'); reader.readAsText(file, 'UTF-8'); }
+    $('#checkout-form').addEventListener('submit', async event => { event.preventDefault(); clearAlert(); const form = event.currentTarget; if (!form.checkValidity()) { form.reportValidity(); return; } const selections = [...state.selections.entries()].filter(([,selection]) => selection.quantity > 0); if (!selections.length) { showAlert('Select at least one equipment unit before generating the document.'); return; } const invalid = selections.some(([key, selection]) => { const split = key.indexOf('::'), item = findItem(key.slice(0, split), key.slice(split + 2)); return item && item.serials.length > 0 && item.unnumbered === 0 && selection.serials.length !== selection.serials.filter(Boolean).length; }); if (invalid) { showAlert('Choose a serial number for every numbered unit.'); return; } const button = $('#generate'), progress = $('#progress-wrap'), bar = $('#progress-bar'); button.disabled = true; button.querySelector('span').textContent = 'Preparing document...'; progress.classList.add('visible'); bar.style.width = '35%'; try { const payload = {purpose:$('#purpose').value.trim(),place:$('#place').value.trim(),date:$('#date').value}; const blob = await generateDocx(payload, selectedRows()); bar.style.width = '100%'; const url = URL.createObjectURL(blob), link = document.createElement('a'); link.href = url; link.download = `equipment-checkout-${payload.date}.docx`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); } catch (error) { showAlert(error.message); } finally { setTimeout(() => { progress.classList.remove('visible'); bar.style.width = '0'; }, 400); button.disabled = false; button.querySelector('span').textContent = 'Generate document'; } });
+    async function loadDefaultInventory() {
+      try {
+        const response = await fetch('gear_inventory.csv', {cache:'no-store'});
+        if (!response.ok) throw new Error('Unable to load gear_inventory.csv.');
+        loadCsv(await response.text());
+      } catch (error) {
+        try { loadCsv(DEFAULT_CSV); } catch (fallbackError) { showAlert(fallbackError.message); }
+      }
+    }
+    $('#date').value = new Date().toISOString().slice(0,10); loadDefaultInventory();
+  </script>
+</body>
+</html>
