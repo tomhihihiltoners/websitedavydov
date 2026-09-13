@@ -4,21 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Дмитрий Давыдов</title>
-    <meta name="description" content="Персональный сайт Дмитрия Давыдова с представлением и ссылкой на Telegram-канал." />
+    <meta name="description" content="Переход в Telegram-канал Дмитрия Давыдова." />
     <meta property="og:title" content="Дмитрий Давыдов" />
-    <meta property="og:description" content="Персональный сайт Дмитрия Давыдова с представлением и ссылкой на Telegram-канал." />
+    <meta property="og:description" content="Переход в Telegram-канал Дмитрия Давыдова." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
     <style>
-      @font-face {
-        font-family: 'Benzin';
-        src: url('/assets/benzin-DZarjTSE.ttf') format('truetype'),
-             url('/assets/benzin-DZarjTSE.ttf') format('truetype');
-        font-weight: 100 900;
-        font-style: normal;
-        font-display: swap;
-      }
-
       *, *::before, *::after {
         box-sizing: border-box;
         margin: 0;
@@ -26,398 +17,84 @@
       }
 
       :root {
-        --bg-color: #ffa690;
-        --card-bg: #f111ff;
-        --card-border: rgba(0, 0, 0, 0.08);
-        --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-        --text-primary: #111827;
-        --text-secondary: #4b5563;
-        --photo-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        --telegram-color: #24A1DE;
-        --telegram-hover-shadow: 0 8px 24px rgba(36, 161, 222, 0.38);
-
-        /* Preloader theme tokens */
-        --preloader-bg: #090c10;
-        --preloader-glow: #24A1DE;
-        --preloader-text: #38bdf8;
-        --preloader-track: rgba(255, 255, 255, 0.1);
+        --bg-color: #0d1117;
       }
 
-      @media (prefers-color-scheme: dark) {
+      @media (prefers-color-scheme: light) {
         :root {
-          --bg-color: linear-gradient(90deg, #060029 0%, #000000 60%, #060029 100%);
-          --card-bg: #161b22;
-          --card-border: rgba(255, 255, 255, 0.1);
-          --card-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.6);
-          --text-primary: #f0f3f6;
-          --text-secondary: #9aa0a6;
-          --photo-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-          --telegram-color: #24A1DE;
-          --telegram-hover-shadow: 0 8px 24px rgba(36, 161, 222, 0.48);
-
-          --preloader-bg: #05070a;
-          --preloader-glow: #38bdf8;
-          --preloader-text: #38bdf8;
-          --preloader-track: rgba(255, 255, 255, 0.12);
+          --bg-color: #f3f4f6;
         }
       }
 
       body {
-        font-family: 'Benzin', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-        background: var(--bg-color);
-        color: var(--text-primary);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        transition: background 0.4s ease, color 0.4s ease;
-        overflow-x: hidden;
-      }
-
-      /* =========================================
-         Cinematic Intro Overlay (Preloader)
-         ========================================= */
-      #preloader {
-        position: fixed;
-        inset: 0;
-        width: 100vw;
-        height: 100vh;
-        background: radial-gradient(ellipse at 50% 45%, #131b28 0%, var(--preloader-bg) 100%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        padding: 24px;
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: auto;
-      }
-
-      #preloader.preloader-hidden {
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-      }
-
-      .preloader-inner {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 360px;
-        gap: 20px;
-      }
-
-      /* Step 1: Sleek Progress Bar */
-      .progress-track {
-        width: 240px;
-        max-width: 80vw;
-        height: 3px;
-        background-color: var(--preloader-track);
-        border-radius: 9999px;
-        overflow: hidden;
-        position: relative;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4) inset;
-      }
-
-      .progress-fill {
-        width: 0%;
-        height: 100%;
-        background: linear-gradient(90deg, #FFFFFF 0%, #D0DAFD 60%, #8AA3FB 100%);
-        border-radius: 9999px;
-        box-shadow: 0 0 14px rgba(36, 161, 222, 0.8), 0 0 4px rgba(94, 234, 212, 0.6);
-        transition: width 1.75s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      /* Step 2: Status Text Reveal */
-      .status-text {
-        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
-        font-size: clamp(0.8125rem, 3.2vw, 0.9375rem);
-        font-weight: 500;
-        letter-spacing: 0.04em;
-        line-height: 1.4;
-        text-align: center;
-        color: var(--preloader-text);
-        text-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
-        opacity: 0;
-        transform: translateY(8px);
-        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        user-select: none;
-      }
-
-      .status-text.visible {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* =========================================
-         Main Profile Card Layout
-         ========================================= */
-      .main-container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 40px;
-        width: 100%;
-        max-width: 680px;
-        background-color: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        box-shadow: var(--card-shadow);
-        padding: 44px;
-        /* Initial state: hidden for smooth entry */
-        opacity: 0;
-        transform: translateY(22px) scale(0.985);
-        transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-                    background-color 0.3s ease,
-                    border-color 0.3s ease,
-                    box-shadow 0.3s ease;
-      }
-
-      .main-container.card-revealed {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-
-      .left-column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-      }
-
-      .name-heading {
-        font-size: 2.125rem;
-        font-weight: 700;
-        line-height: 1.2;
-        letter-spacing: -0.025em;
-        color: var(--text-primary);
-        margin-bottom: 12px;
-      }
-
-      .bio-text {
-        font-size: 1.0625rem;
-        line-height: 1.6;
-        color: var(--text-secondary);
-        margin-bottom: 28px;
-        max-width: 380px;
-      }
-
-      .right-column {
-        flex-shrink: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .profile-photo {
-        width: 200px;
-        height: 200px;
-        aspect-ratio: 1 / 1;
-        object-fit: cover;
-        border-radius: 6px;
-        display: block;
-        box-shadow: var(--photo-shadow);
         background-color: var(--bg-color);
-        transition: box-shadow 0.3s ease;
+        min-height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+        overflow: hidden;
       }
 
-      .telegram-btn {
+      .image-link {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        background-color: var(--telegram-color);
-        color: #ffffff;
         text-decoration: none;
-        font-size: 0.9375rem;
-        font-weight: 600;
-        line-height: 1;
-        padding: 12px 24px;
-        border-radius: 9999px;
-        white-space: nowrap;
-        box-shadow: 0 4px 12px rgba(36, 161, 222, 0.25);
-        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, filter 0.2s ease;
+        outline: none;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
       }
 
-      .telegram-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--telegram-hover-shadow);
+      .image-link:hover {
+        transform: scale(1.02);
         filter: brightness(1.04);
       }
 
-      .telegram-btn:active {
-        transform: translateY(0);
+      .image-link:active {
+        transform: scale(0.98);
         filter: brightness(0.96);
       }
 
-      .telegram-btn:focus-visible {
-        outline: 2px solid var(--telegram-color);
-        outline-offset: 3px;
+      .image-link:focus-visible {
+        outline: 3px solid #24A1DE;
+        outline-offset: 6px;
+        border-radius: 18px;
       }
 
-      .telegram-icon {
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
-        fill: currentColor;
-      }
-
-      @media (max-width: 640px) {
-        body {
-          padding: 16px;
-        }
-
-        .main-container {
-          flex-direction: column-reverse;
-          text-align: center;
-          gap: 28px;
-          padding: 32px 24px;
-        }
-
-        .left-column {
-          align-items: center;
-          text-align: center;
-          width: 100%;
-        }
-
-        .name-heading {
-          font-size: 1.875rem;
-        }
-
-        .bio-text {
-          font-size: 1rem;
-          margin-bottom: 24px;
-          max-width: 100%;
-        }
-
-        .profile-photo {
-          width: 180px;
-          height: 180px;
-        }
-
-        .telegram-btn {
-          width: 100%;
-          max-width: 280px;
-        }
+      .picture {
+        max-width: min(90vw, 600px);
+        max-height: 90vh;
+        width: auto;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        border-radius: 16px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+        user-select: none;
+        -webkit-user-drag: none;
       }
     </style>
   </head>
   <body>
-    <!-- Step 0: Fullscreen Cinematic Intro Overlay -->
-    <div id="preloader" role="status" aria-live="polite">
-      <div class="preloader-inner" id="preloader-inner">
-        <!-- Step 1: Sleek Loading Bar -->
-        <div class="progress-track" id="progress-track" aria-hidden="true">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <!-- Step 2: Status Text Reveal -->
-        <div class="status-text" id="status-text">
-          щащащащащащащащащащаща.
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: Main Personal Card -->
-    <main class="main-container" id="main-container">
-      <div class="left-column" id="left-column">
-        <h1 class="name-heading" id="profile-name">Дмитрий Давыдов</h1>
-        <p class="bio-text" id="profile-bio">
-          Просто Дима. Учусь, снимаю, иногда выкладываю посты. Подписывайся!
-        </p>
-        <a
-          href="https://t.me/+jAjso927D9ZkYWZi"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="telegram-btn"
-          id="telegram-cta-btn"
-          aria-label="Перейти в Telegram-канал Дмитрия Давыдова"
-        >
-          <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
-          </svg>
-          <span>Мой Telegram-канал</span>
-        </a>
-      </div>
-      <div class="right-column" id="right-column">
-        <img
-          src="/assets/me-C9DFbgva.jpg"
-          onerror="if (this.src !== 'https://via.placeholder.com/200') this.src='https://via.placeholder.com/200';"
-          alt="Дмитрий Давыдов"
-          class="profile-photo"
-          id="profile-photo"
-          width="200"
-          height="200"
-          loading="eager"
-        />
-      </div>
-    </main>
-
-    <!-- Orchestration Script -->
-    <script>
-      (function() {
-        // Elements
-        const preloader = document.getElementById('preloader');
-        const progressFill = document.getElementById('progress-fill');
-        const statusText = document.getElementById('status-text');
-        const mainContainer = document.getElementById('main-container');
-
-        // Trigger intro sequence on window load or DOMContentLoaded
-        function startIntro() {
-          // Step 1: Smoothly animate progress bar to 100%
-          requestAnimationFrame(function() {
-            setTimeout(function() {
-              if (progressFill) {
-                progressFill.style.width = '100%';
-              }
-            }, 80);
-          });
-
-          // Step 2: Once the bar completes (~1.75s), fade in status text
-          setTimeout(function() {
-            if (statusText) {
-              statusText.classList.add('visible');
-            }
-          }, 1850);
-
-          // Step 3: Keep status text visible for ~1.1s, then fade out preloader and reveal main card
-          setTimeout(function() {
-            // Fade out preloader overlay
-            if (preloader) {
-              preloader.classList.add('preloader-hidden');
-            }
-
-            // Smoothly fade in and slide up main profile card
-            if (mainContainer) {
-              mainContainer.classList.add('card-revealed');
-            }
-
-            // Clean up preloader from layout completely after fade transition completes
-            setTimeout(function() {
-              if (preloader) {
-                preloader.style.display = 'none';
-              }
-            }, 800);
-          }, 3050);
-        }
-
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-          startIntro();
-        } else {
-          window.addEventListener('DOMContentLoaded', startIntro);
-        }
-      })();
-    </script>
+    <a
+      href="https://t.me/+jAjso927D9ZkYWZi"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="image-link"
+      id="telegram-image-link"
+      aria-label="Перейти в Telegram-канал"
+    >
+      <img
+        src="data:image/png;base64,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"
+        onerror="if (this.src !== '/kartinka.png') this.src='/kartinka.png';"
+        alt="Telegram-канал"
+        class="picture"
+        id="kartinka-img"
+      />
+    </a>
   </body>
 </html>
