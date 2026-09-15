@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Доступ ограничен</title>
+  <style>
+    /* Подключение локального шрифта Benzin */
+    @font-face {
+    font-family: 'Benzin';
+    src: url('/Benzin-Bold.woff2') format('woff2'),
+        url('/Benzin-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    }
+
+    :root {
+      --bg: #0c0d12;
+      --card-bg: #151720;
+      --border: #262938;
+      --text: #f0f2f8;
+      --text-muted: #7e8499;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --error: #ff4757;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 30px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      transition: max-width 0.3s ease;
+    }
+
+    h1 {
+      font-family: 'Benzin', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: #0f1017;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1.1rem;
+      outline: none;
+      text-align: center;
+      letter-spacing: 4px;
+      transition: border-color 0.2s ease;
+    }
+
+    input[type="password"]:focus {
+      border-color: var(--accent);
+    }
+
+    input[type="password"].error {
+      border-color: var(--error);
+      animation: shake 0.35s ease;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Benzin', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 0.85rem;
+      min-height: 20px;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .image-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .image-container img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="mainCard">
+    <div id="lockForm">
+      <h1>Закрытый раздел</h1>
+      <p class="subtitle">Введите пароль для доступа</p>
+
+      <form class="form-group" onsubmit="event.preventDefault(); checkPassword();">
+        <input 
+          type="password" 
+          id="pwdInput" 
+          placeholder="••••••••" 
+          autocomplete="off" 
+          autofocus 
+        />
+        <button type="submit">Войти</button>
+      </form>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+
+    <div class="image-container" id="secretView">
+      <img id="targetImage" src="" alt="Secret" />
+      <button onclick="lockAgain()" style="background: #1e2230; border: 1px solid var(--border);">Закрыть</button>
+    </div>
+  </div>
+
+  <script>
+    const SECRET_PASSWORD = "581234";
+    const EXTERNAL_IMAGE_URL = "https://file.garden/acePswnzhB1MhjFX/%D1%81%D0%BC%D0%B5%D1%80%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%D1%84%D0%B0%D0%B9%D0%BB"; // Ваша ссылка
+
+    const input = document.getElementById("pwdInput");
+    const errorMsg = document.getElementById("errorMsg");
+    const lockForm = document.getElementById("lockForm");
+    const secretView = document.getElementById("secretView");
+    const targetImage = document.getElementById("targetImage");
+    const mainCard = document.getElementById("mainCard");
+
+    function checkPassword() {
+      const val = input.value.trim();
+
+      if (val === SECRET_PASSWORD) {
+        errorMsg.innerText = "";
+        input.classList.remove("error");
+        targetImage.src = EXTERNAL_IMAGE_URL;
+
+        lockForm.style.display = "none";
+        secretView.style.display = "flex";
+        mainCard.style.maxWidth = "700px";
+      } else {
+        errorMsg.innerText = "Неверный пароль";
+        input.classList.add("error");
+        input.value = "";
+        setTimeout(() => input.classList.remove("error"), 400);
+      }
+    }
+
+    function lockAgain() {
+      targetImage.src = "";
+      secretView.style.display = "none";
+      lockForm.style.display = "block";
+      mainCard.style.maxWidth = "440px";
+      input.value = "";
+      input.focus();
+    }
+  </script>
+</body>
+</html>
