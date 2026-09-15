@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Каталог ресурсов</title>
+  <style>
+    :root {
+      --bg: #0c0d12;
+      --card-bg: #151720;
+      --card-hover: #1c202c;
+      --border: #262938;
+      --border-hover: #3d435c;
+      --text-main: #f0f2f8;
+      --text-muted: #7e8499;
+      --accent: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 16px 64px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    /* Быстрый поиск */
+    .search-box {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent);
+    }
+
+    .search-box::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Список карточек */
+    .catalog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .catalog-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .catalog-item:hover {
+      background: var(--card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .item-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .item-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent);
+      border-radius: 6px;
+    }
+
+    .item-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .arrow-icon {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .catalog-item:hover .arrow-icon {
+      color: var(--text-main);
+      transform: translateX(4px);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Каталог</h1>
+      <p class="subtitle">Материалы, проекты и полезные сервисы</p>
+    </header>
+
+    <input type="text" id="search" class="search-box" placeholder="Поиск по названию или теме..." autocomplete="off" />
+
+    <div class="catalog-list" id="list"></div>
+    <div class="empty-state" id="empty">Ничего не найдено</div>
+  </div>
+
+  <script>
+    // ==========================================
+    // СПИСОК РЕСУРСОВ ДЛЯ КАТАЛОГА
+    // ==========================================
+    const ITEMS = [
+      {
+        title: "Генератор смет и документов",
+        url: "/docs",
+        desc: "Утилита для формирования накладных и списков техники",
+        tag: "Утилиты"
+      },
+      {
+        title: "Колесо фортуны",
+        url: "/fortune",
+        desc: "Сколько сегодня спим перед съемочной сменой",
+        tag: "Интерактив"
+      },
+      {
+        title: "Telegram-канал",
+        url: "https://t.me/",
+        desc: "Бэкстейджи, съемки, новости и премьеры",
+        tag: "Медиа"
+      },
+      {
+        title: "Шуточный опрос",
+        url: "/duo",
+        desc: "Попытка уволиться и расчет текущей ставки",
+        tag: "Фан"
+      }
+    ];
+
+    const listEl = document.getElementById("list");
+    const searchEl = document.getElementById("search");
+    const emptyEl = document.getElementById("empty");
+
+    function render(items) {
+      listEl.innerHTML = "";
+      if (items.length === 0) {
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+
+      items.forEach(item => {
+        const isExternal = item.url.startsWith("http");
+        const a = document.createElement("a");
+        a.className = "catalog-item";
+        a.href = item.url;
+        if (isExternal) {
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+        }
+
+        a.innerHTML = `
+          <div class="item-content">
+            <div class="item-title">
+              ${item.title}
+              ${item.tag ? `<span class="item-tag">${item.tag}</span>` : ""}
+            </div>
+            ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ""}
+          </div>
+          <div class="arrow-icon">→</div>
+        `;
+        listEl.appendChild(a);
+      });
+    }
+
+    // Живая фильтрация
+    searchEl.addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      const filtered = ITEMS.filter(item => 
+        item.title.toLowerCase().includes(q) || 
+        (item.desc && item.desc.toLowerCase().includes(q)) ||
+        (item.tag && item.tag.toLowerCase().includes(q))
+      );
+      render(filtered);
+    });
+
+    render(ITEMS);
+  </script>
+</body>
+</html>
