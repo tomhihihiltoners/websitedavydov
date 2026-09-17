@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#102525">
+  <title>Credits Studio | Список участников</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Credits Studio">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span>Credits Studio</span>
+      </a>
+      <div class="topbar-note"><span class="status-dot"></span> Локальный рабочий файл</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow">PRODUCTION TOOL / 01</div>
+        <h1>Соберите<br><em>идеальные</em> титры.</h1>
+        <p class="intro-copy">Загрузите список команды, назначьте роли и получите аккуратный документ для финальных материалов.</p>
+        <div class="intro-meta"><span>CSV → DOCX</span><span class="meta-line"></span><span>UTF-8 / Кириллица</span></div>
+      </section>
+
+      <div class="workspace-grid">
+        <section class="panel roster-panel" aria-labelledby="roster-title">
+          <div class="panel-heading">
+            <div>
+              <div class="section-kicker">Шаг 01</div>
+              <h2 id="roster-title">Состав команды</h2>
+            </div>
+            <span class="count-badge" id="member-count">0 человек</span>
+          </div>
+
+          <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Загрузить CSV файл">
+            <div class="drop-icon" aria-hidden="true">↑</div>
+            <div class="drop-copy"><strong>Перетащите CSV сюда</strong><span>или выберите файл с устройства</span></div>
+            <button class="button button-secondary" id="choose-file" type="button">Выбрать файл</button>
+            <input id="csv-input" type="file" accept=".csv,text/csv" hidden>
+          </div>
+
+          <div class="or-divider"><span>или</span></div>
+
+          <details class="paste-details">
+            <summary><span class="summary-icon">+</span><span>Вставить данные вручную</span><span class="summary-hint">CSV или одно имя в строке</span></summary>
+            <div class="paste-content">
+              <textarea id="csv-text" rows="5" placeholder="Имя\nИван Иванов\nПетр Петров\nАлексей Смирнов"></textarea>
+              <button class="button button-secondary full-button" id="load-paste" type="button">Загрузить список</button>
+            </div>
+          </details>
+
+          <button class="demo-button" id="load-demo" type="button"><span>✦</span> Загрузить демо-данные</button>
+          <p class="helper-text" id="roster-status">Добавьте CSV, чтобы начать назначение ролей.</p>
+        </section>
+
+        <section class="panel roles-panel" aria-labelledby="roles-title">
+          <div class="panel-heading">
+            <div>
+              <div class="section-kicker">Шаг 02</div>
+              <h2 id="roles-title">Роли и назначения</h2>
+            </div>
+            <span class="assigned-badge" id="assigned-count">0 назначено</span>
+          </div>
+          <div class="roles-list" id="roles-list"></div>
+          <form class="add-role" id="add-role-form">
+            <input id="new-role" type="text" maxlength="80" placeholder="Новая роль, например: Гафер">
+            <button class="button button-dark" type="submit"><span>+</span> Добавить роль</button>
+          </form>
+        </section>
+
+        <section class="panel preview-panel" aria-labelledby="preview-title">
+          <div class="panel-heading preview-heading">
+            <div>
+              <div class="section-kicker">Шаг 03</div>
+              <h2 id="preview-title">Предпросмотр</h2>
+            </div>
+            <button class="copy-button" id="copy-preview" type="button" title="Скопировать предпросмотр" disabled><span aria-hidden="true">▣</span> Копировать</button>
+          </div>
+          <div class="preview-paper" id="preview-paper">
+            <div class="preview-title">СПИСОК СЪЕМОЧНОЙ ГРУППЫ</div>
+            <div class="preview-lines" id="preview-lines"><span class="empty-preview">Назначьте хотя бы одну роль,<br>и она появится здесь.</span></div>
+          </div>
+          <div class="export-row">
+            <div class="export-caption"><span class="doc-icon">W</span><span><strong>Готово для Word</strong><small>Файл .docx с поддержкой UTF-8</small></span></div>
+            <button class="button button-primary" id="export-docx" type="button" disabled><span>↓</span> Экспортировать .docx</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer><span>Credits Studio</span><span>Создано для монтажной</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
